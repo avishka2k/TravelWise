@@ -63,7 +63,7 @@ class _AppSignUpState extends State<AppSignUp> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Can\'t be empty';
-                          } else if (value != _pwController!.text) {
+                          } else if (value != _pwController.text) {
                             return 'Incorrect password';
                           }
                           return null;
@@ -86,12 +86,13 @@ class _AppSignUpState extends State<AppSignUp> {
                         ),
                       ),
                       AppPrimaryBtn(
+                        btnText: 'Sign Up',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {}
                         },
                       ),
                       const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 35),
+                        padding: EdgeInsets.symmetric(vertical: 20),
                         child: Row(
                           children: [
                             Expanded(
@@ -163,29 +164,41 @@ class _AppSignUpState extends State<AppSignUp> {
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Already have an account?"),
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text("Sign In"),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-            Positioned(
-              bottom: 50,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have an account?"),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text("Login"),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // Positioned(
+            //   bottom: 50,
+            //   left: 0,
+            //   right: 0,
+            //   child: Center(
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         const Text("Already have an account?"),
+            //         TextButton(
+            //           onPressed: () {},
+            //           child: const Text("Sign Up"),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -4,14 +4,14 @@ import 'package:travelwise/components/app_button.dart';
 import 'package:travelwise/components/pw_form_field.dart';
 import 'package:travelwise/components/text_form_field.dart';
 
-class AppLogin extends StatefulWidget {
-  const AppLogin({super.key});
+class AppSignin extends StatefulWidget {
+  const AppSignin({super.key});
 
   @override
-  State<AppLogin> createState() => _AppLoginState();
+  State<AppSignin> createState() => _AppSigninState();
 }
 
-class _AppLoginState extends State<AppLogin> {
+class _AppSigninState extends State<AppSignin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
   bool checked = false;
@@ -85,6 +85,7 @@ class _AppLoginState extends State<AppLogin> {
                         ),
                       ),
                       AppPrimaryBtn(
+                        btnText: 'Sign In',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {}
                         },

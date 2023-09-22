@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>943857388704-7mrc65j98q09cumnvj5odc243lbdukdm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.943857388704-7mrc65j98q09cumnvj5odc243lbdukdm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBI93MEH3-FmBETm-4KkM60qYFCa5ziM5A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>943857388704</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.travelwise</string>
+	<key>PROJECT_ID</key>
+	<string>travelwise-b5ee3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>travelwise-b5ee3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:943857388704:ios:745e1e35f2079f6b4d4dc5</string>
+	<key>DATABASE_URL</key>
+	<string>https://travelwise-b5ee3-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

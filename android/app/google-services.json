@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "943857388704",
+    "firebase_url": "https://travelwise-b5ee3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "travelwise-b5ee3",
+    "storage_bucket": "travelwise-b5ee3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943857388704:android:eba1f57d070edc0e4d4dc5",
+        "android_client_info": {
+          "package_name": "com.example.travelwise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943857388704-5po20veepb0vho1ko44pc2d8724mvl8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5hCJVI9pC4NN4Qqvom1flIADbGf3mbxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943857388704-5po20veepb0vho1ko44pc2d8724mvl8n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "943857388704-7mrc65j98q09cumnvj5odc243lbdukdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.travelwise"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

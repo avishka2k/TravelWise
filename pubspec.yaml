@@ -37,6 +37,7 @@ dependencies:
   flutter_onboarding_slider: ^1.0.10
   google_fonts:
   flutter_slidable: ^3.0.0
+  firebase_core: ^2.16.0
 
 dev_dependencies:
   flutter_test:

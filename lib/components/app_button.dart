@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppPrimaryBtn extends StatelessWidget {
-  final onPressed;
-  const AppPrimaryBtn({
+  Function() onPressed;
+  String btnText;
+  AppPrimaryBtn({
     super.key,
     required this.onPressed,
+    required this.btnText,
   });
 
   @override
@@ -19,9 +21,9 @@ class AppPrimaryBtn extends StatelessWidget {
                 const Size.fromHeight(50.0),
               ),
             ),
-            child: const Text(
-              'Login',
-              style: TextStyle(fontSize: 16),
+            child: Text(
+              btnText,
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         ),
