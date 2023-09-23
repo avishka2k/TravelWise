@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travelwise/firebase_options.dart';
+import 'package:travelwise/screens/settings/settings.dart';
 import 'package:travelwise/screens/signup/signup.dart';
 
 void main() async {
@@ -18,13 +19,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter App',
+      debugShowCheckedModeBanner: false,
+      title: 'TravelWise',
       theme: ThemeData(
         colorSchemeSeed: Colors.deepPurple,
         brightness: Brightness.light,
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+        useMaterial3: true,
       ),
-      home: const AppSignUp(),
+      home: const AppSettings(),
     );
   }
 }

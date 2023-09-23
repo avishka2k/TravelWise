@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travelwise/app_data.dart';
 import 'package:travelwise/components/settings_item.dart';
 
-class AppSettings extends StatelessWidget {
+class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
+
+  @override
+  State<AppSettings> createState() => _AppSettingsState();
+}
+
+enum SingingCharacter { lafayette, jefferson }
+
+class _AppSettingsState extends State<AppSettings> {
+  SingingCharacter? character = SingingCharacter.lafayette;
+  int selectedOption = 1;
+
+  setThemeType() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('themeType', selectedOption);
+  }
+
+  getThemeType() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedOption = prefs.getInt('themeType')!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getThemeType();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,44 +86,27 @@ class AppSettings extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: appBorderRadius,
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                    child: Text("Settings",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500)),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 12,
+                    ),
+                    child: Text(
+                      "Settings",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                   AppSettingsItem(
-                      icon: Icons.account_circle_outlined,
-                      name: 'Edit Profile'),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.1,
-                          endIndent: 14,
-                          indent: 14,
-                        ),
-                      ),
-                    ],
+                    icon: Icons.account_circle_outlined,
+                    name: 'Edit Profile',
                   ),
-                  AppSettingsItem(icon: Icons.light_mode, name: 'App Theme'),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.1,
-                          endIndent: 14,
-                          indent: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                  AppSettingsItem(
-                      icon: Icons.notifications_none, name: 'Notification'),
-                  Row(
+                  const Row(
                     children: [
                       Expanded(
                         child: Divider(
@@ -106,8 +118,43 @@ class AppSettings extends StatelessWidget {
                     ],
                   ),
                   AppSettingsItem(
-                      icon: Icons.lock_outline, name: 'Change Password'),
-                  SizedBox(height: 5),
+                    icon: Icons.light_mode,
+                    name: 'App Theme',
+                    onPressed: () {
+                      themeDialog(context);
+                    },
+                  ),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.1,
+                          endIndent: 14,
+                          indent: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSettingsItem(
+                    icon: Icons.notifications_none,
+                    name: 'Notification',
+                  ),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.1,
+                          endIndent: 14,
+                          indent: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSettingsItem(
+                    icon: Icons.lock_outline,
+                    name: 'Change Password',
+                  ),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -118,10 +165,10 @@ class AppSettings extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: appBorderRadius,
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                     child: Text("About the application",
                         style: TextStyle(
@@ -129,7 +176,7 @@ class AppSettings extends StatelessWidget {
                   ),
                   AppSettingsItem(
                       icon: Icons.info_outline, name: 'About the application'),
-                  Row(
+                  const Row(
                     children: [
                       Expanded(
                         child: Divider(
@@ -142,7 +189,7 @@ class AppSettings extends StatelessWidget {
                   ),
                   AppSettingsItem(
                       icon: Icons.chat_bubble_outline, name: 'Feedback'),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -161,5 +208,87 @@ class AppSettings extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget themeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                'Choose theme',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              content: IntrinsicHeight(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    ListTile(
+                      title: const Text('System default'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: selectedOption,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Light'),
+                      leading: Radio(
+                        value: 2,
+                        groupValue: selectedOption,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Dark'),
+                      leading: Radio(
+                        value: 3,
+                        groupValue: selectedOption,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setThemeType();
+                    setState(() {
+                      setThemeType();
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Ok'),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+    return Container();
   }
 }
