@@ -2,8 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travelwise/app_data.dart';
+import 'package:travelwise/firebase/auth/auth_changes.dart';
 import 'package:travelwise/firebase_options.dart';
-import 'package:travelwise/screens/settings/settings.dart';
+import 'package:travelwise/screens/signup/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
         useMaterial3: true,
       ),
-      home: const AppSettings(),
+      home: AuthChanges(),
     );
   }
 }
