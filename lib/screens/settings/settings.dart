@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travelwise/app_data.dart';
+import 'package:travelwise/components/appbar/appbar_back.dart';
 import 'package:travelwise/components/settings_item.dart';
+import 'package:travelwise/screens/settings/edit_profile.dart';
 
 class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
@@ -15,6 +18,7 @@ enum SingingCharacter { lafayette, jefferson }
 class _AppSettingsState extends State<AppSettings> {
   SingingCharacter? character = SingingCharacter.lafayette;
   int selectedOption = 1;
+  int notifications = 5;
 
   setThemeType() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,6 +41,7 @@ class _AppSettingsState extends State<AppSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const AppBarWithBack(title: 'Settings'),
       body: Padding(
         padding: appPagePadding,
         child: Column(
@@ -47,10 +52,9 @@ class _AppSettingsState extends State<AppSettings> {
                   width: 90,
                   height: 90,
                   decoration: BoxDecoration(
-                    color: Colors.deepPurple,
+                    color: AppColors.dark,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.deepPurple,
                       width: 1,
                     ),
                   ),
@@ -58,15 +62,15 @@ class _AppSettingsState extends State<AppSettings> {
                     padding: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40),
-                      child: Image.network(
-                        'https://images.unsplash.com/photo-1518333648466-e7e0bb965e70?w=1280&h=720',
-                        width: 65,
-                        height: 65,
-                        fit: BoxFit.cover,
+                      child: const Icon(
+                        Icons.account_circle,
+                        color: AppColors.light,
+                        size: 60,
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 5),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 5),
                   child: Text('Avishka Prabath',
@@ -105,6 +109,14 @@ class _AppSettingsState extends State<AppSettings> {
                   AppSettingsItem(
                     icon: Icons.account_circle_outlined,
                     name: 'Edit Profile',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditProfile(),
+                        ),
+                      );
+                    },
                   ),
                   const Row(
                     children: [
