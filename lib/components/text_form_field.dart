@@ -7,6 +7,9 @@ class AppTextFormField extends StatelessWidget {
   String fieldName;
   String hintText;
   String? errormsg;
+  bool readOnly;
+  final onTap;
+
 
   AppTextFormField({
     super.key,
@@ -14,6 +17,8 @@ class AppTextFormField extends StatelessWidget {
     required this.fieldName,
     required this.hintText,
     this.errormsg,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -40,6 +45,8 @@ class AppTextFormField extends StatelessWidget {
               }
               return null;
             },
+            readOnly: readOnly,
+            onTap: onTap,
             controller: controller,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(

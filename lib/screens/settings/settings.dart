@@ -7,6 +7,7 @@ import 'package:travelwise/app_data.dart';
 import 'package:travelwise/components/appbar/appbar_back.dart';
 import 'package:travelwise/components/capitalize.dart';
 import 'package:travelwise/components/settings_item.dart';
+import 'package:travelwise/firebase/auth/authentication.dart';
 import 'package:travelwise/firebase/user_basic.dart';
 import 'package:travelwise/screens/settings/edit_profile.dart';
 
@@ -74,7 +75,8 @@ class _AppSettingsState extends State<AppSettings> {
                         child: Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 2, 2, 2, 2),
-                            child: userData['profileUrl'] == null
+                            child: userData['profileUrl'] == null ||
+                                    userData['profileUrl'] == ''
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(40),
                                     child: const Icon(
@@ -246,29 +248,67 @@ class _AppSettingsState extends State<AppSettings> {
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.logout,
-                          color: Colors.red,
-                        ),
-                        SizedBox(width: 3),
-                        Text(
-                          "Sign Out",
-                          style: TextStyle(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: GestureDetector(
+                      onTap: () {
+                        signOutDialog(context);
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.logout,
                             color: Colors.red,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 3),
+                          Text(
+                            "SignOut",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
               ),
             ),
     );
+  }
+
+  Widget signOutDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                'Are you sure?',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    AppAuth().signOut(context);
+                  },
+                  child: const Text('SignOut'),
+                )
+              ],
+            );
+          });
+        });
+    return Container();
   }
 
   Widget themeDialog(BuildContext context) {

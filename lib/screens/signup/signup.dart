@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:travelwise/app_data.dart';
 import 'package:travelwise/components/app_button.dart';
 import 'package:travelwise/components/app_toast.dart';
 import 'package:travelwise/components/pw_form_field.dart';
 import 'package:travelwise/components/text_form_field.dart';
 import 'package:travelwise/firebase/auth/authentication.dart';
+import 'package:travelwise/screens/signin/signin.dart';
 
 class AppSignUp extends StatefulWidget {
   const AppSignUp({super.key});
@@ -20,8 +22,25 @@ class _AppSignUpState extends State<AppSignUp> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
   final TextEditingController _cpwController = TextEditingController();
+  final TextEditingController _bdayController = TextEditingController();
   bool checked = false;
   final _formKey = GlobalKey<FormState>();
+  DateTime selectedDate = DateTime.now();
+
+  void datePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: selectedDate,
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2100))
+        .then((value) {
+      selectedDate = value!;
+      setState(() {
+        String formatDate = DateFormat('y-MM-dd').format(selectedDate);
+        _bdayController.text = formatDate;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +73,13 @@ class _AppSignUpState extends State<AppSignUp> {
                       fieldName: 'Email Address',
                       hintText: 'Enter your email',
                       errormsg: 'Can\'t be empty',
+                    ),
+                    AppTextFormField(
+                      hintText: 'Birthday',
+                      controller: _bdayController,
+                      readOnly: true,
+                      onTap: datePicker,
+                      fieldName: 'Birthday',
                     ),
                     AppPwFormField(
                       controller: _pwController,
@@ -103,6 +129,8 @@ class _AppSignUpState extends State<AppSignUp> {
                             _emailController.text,
                             _pwController.text,
                             _nameController.text,
+                            selectedDate,
+                            context,
                           );
                         }
                       },
@@ -181,13 +209,21 @@ class _AppSignUpState extends State<AppSignUp> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 10),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Already have an account?"),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AppSignin(),
+                                ),
+                              );
+                            },
                             child: const Text("Sign In"),
                           )
                         ],

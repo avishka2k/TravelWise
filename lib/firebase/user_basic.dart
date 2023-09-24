@@ -25,6 +25,7 @@ Future<Map<String, dynamic>> getUserData() async {
     return {};
   }
 }
+
 Future<void> updateUserBasic(
   String fullname,
   String gender,
@@ -34,16 +35,24 @@ Future<void> updateUserBasic(
   File? imageFile,
 ) async {
   try {
-    File image = File(imageFile!.path);
+    if (imageFile != null) {
+      File image = File(imageFile!.path);
 
-    final storageRef = FirebaseStorage.instance
-        .ref()
-        .child('images/users/${DateTime.now()}.png');
-    
-    // Upload the image to Firebase Storage
-    UploadTask uploadTask = storageRef.putFile(image);
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
-    String imageUrl = await taskSnapshot.ref.getDownloadURL();
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('images/users/${DateTime.now()}.png');
+
+      // Upload the image to Firebase Storage
+      UploadTask uploadTask = storageRef.putFile(image);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+      String imageUrl = await taskSnapshot.ref.getDownloadURL();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .update({
+        'profileUrl': imageUrl,
+      });
+    }
 
     // Update user data in Firestore
     await FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
@@ -52,7 +61,6 @@ Future<void> updateUserBasic(
       'birthDay': birthDay,
       'phoneNumber': int.parse(phoneNumber),
       'address': address,
-      'profileUrl': imageUrl,
     });
 
     AppToastmsg.appToastMeassage('Update success');

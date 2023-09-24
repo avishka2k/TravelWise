@@ -157,6 +157,7 @@ class _EditProfileState extends State<EditProfile> {
                                       ].request();
                                       if (statuses[Permission.camera]!
                                           .isGranted) {
+                                        // ignore: use_build_context_synchronously
                                         showImagePicker(context);
                                       } else {
                                         print('no permission provided');

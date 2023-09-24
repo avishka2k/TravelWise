@@ -4,6 +4,7 @@ import 'package:travelwise/components/app_button.dart';
 import 'package:travelwise/components/pw_form_field.dart';
 import 'package:travelwise/components/text_form_field.dart';
 import 'package:travelwise/firebase/auth/authentication.dart';
+import 'package:travelwise/screens/signup/signup.dart';
 
 class AppSignin extends StatefulWidget {
   const AppSignin({super.key});
@@ -27,7 +28,7 @@ class _AppSigninState extends State<AppSignin> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 70),
               Row(
                 children: [
                   const Text("Hi, Welcome Back!", style: appTextHeader1),
@@ -43,7 +44,7 @@ class _AppSigninState extends State<AppSignin> {
                 "Hello again, you've been missed!",
                 style: appTextSubHeader,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 70),
               Form(
                 key: _formKey,
                 child: Column(
@@ -91,6 +92,7 @@ class _AppSigninState extends State<AppSignin> {
                           AppAuth().login(
                             _emailController.text,
                             _pwController.text,
+                            context,
                           );
                         }
                       },
@@ -171,13 +173,21 @@ class _AppSigninState extends State<AppSignin> {
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Already have an account?"),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppSignUp(),
+                          ),
+                        );
+                      },
                       child: const Text("Sign In"),
                     )
                   ],
