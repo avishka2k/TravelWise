@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:travelwise/app_data.dart';
 
+// ignore: must_be_immutable
 class AppPrimaryBtn extends StatelessWidget {
   Function() onPressed;
   String btnText;
@@ -17,13 +19,24 @@ class AppPrimaryBtn extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onPressed,
             style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                AppColors.dark
+              ),
               fixedSize: MaterialStateProperty.all<Size>(
-                const Size.fromHeight(50.0),
+                const Size.fromHeight(60.0),
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: appBorderRadius,
+                ),
               ),
             ),
             child: Text(
               btnText,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
