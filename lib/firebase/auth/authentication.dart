@@ -37,6 +37,7 @@ class AppAuth {
         'gender': 'Male',
         'phoneNumber': phoneNumber,
         'birthDay': birthDay,
+        'profileUrl': '',
       });
     } catch (e) {
       AppToastmsg.appToastMeassage('Failed to upload data');

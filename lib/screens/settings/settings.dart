@@ -5,6 +5,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travelwise/app_data.dart';
 import 'package:travelwise/components/appbar/appbar_back.dart';
+import 'package:travelwise/components/capitalize.dart';
 import 'package:travelwise/components/settings_item.dart';
 import 'package:travelwise/firebase/user_basic.dart';
 import 'package:travelwise/screens/settings/edit_profile.dart';
@@ -71,29 +72,45 @@ class _AppSettingsState extends State<AppSettings> {
                           ),
                         ),
                         child: Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(40),
-                            child: const Icon(
-                              Icons.account_circle,
-                              color: AppColors.light,
-                              size: 60,
-                            ),
-                          ),
-                        ),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                2, 2, 2, 2),
+                            child: userData['profileUrl'] == null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: const Icon(
+                                      Icons.account_circle,
+                                      color: AppColors.light,
+                                      size: 60,
+                                    ),
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: Image.network(
+                                      userData['profileUrl'].toString(),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )),
                       ),
                       const SizedBox(height: 5),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(userData['fullname'].toString(),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500)),
-                      ),
-                      Text(userData['email'].toString(),
+                        child: Text(
+                          capitalizedText(
+                            userData['fullname'].toString(),
+                          ),
                           style: const TextStyle(
-                              fontSize: 13,
-                              color: Color.fromARGB(255, 102, 102, 102))),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        userData['email'].toString(),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color.fromARGB(255, 102, 102, 102),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -195,14 +212,21 @@ class _AppSettingsState extends State<AppSettings> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 12),
-                          child: Text("About the application",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                            vertical: 10,
+                            horizontal: 12,
+                          ),
+                          child: Text(
+                            "About the application",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                         AppSettingsItem(
-                            icon: Icons.info_outline,
-                            name: 'About the application'),
+                          icon: Icons.info_outline,
+                          name: 'About the application',
+                        ),
                         const Row(
                           children: [
                             Expanded(
@@ -215,7 +239,9 @@ class _AppSettingsState extends State<AppSettings> {
                           ],
                         ),
                         AppSettingsItem(
-                            icon: Icons.chat_bubble_outline, name: 'Feedback'),
+                          icon: Icons.chat_bubble_outline,
+                          name: 'Feedback',
+                        ),
                         const SizedBox(height: 5),
                       ],
                     ),
@@ -225,9 +251,17 @@ class _AppSettingsState extends State<AppSettings> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.logout, color: Colors.red),
+                        Icon(
+                          Icons.logout,
+                          color: Colors.red,
+                        ),
                         SizedBox(width: 3),
-                        Text("Sign Out", style: TextStyle(color: Colors.red)),
+                        Text(
+                          "Sign Out",
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
                       ],
                     ),
                   )

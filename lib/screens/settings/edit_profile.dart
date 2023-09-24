@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:travelwise/app_data.dart';
 import 'package:travelwise/components/app_button.dart';
 import 'package:travelwise/components/app_toast.dart';
 import 'package:travelwise/components/appbar/appbar_back.dart';
+import 'package:travelwise/components/capitalize.dart';
 import 'package:travelwise/components/modern_inputfiled.dart';
 import 'package:travelwise/firebase/user_basic.dart';
 
@@ -19,15 +25,16 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   Map<String, dynamic> userData = {};
   final TextEditingController _fullname = TextEditingController();
-  final TextEditingController _gender = TextEditingController();
   final TextEditingController _bDay = TextEditingController();
   final TextEditingController _pnNumber = TextEditingController();
   final TextEditingController _address = TextEditingController();
   bool isLoading = true;
   DateTime selectedDate = DateTime.now();
-  DateTime? initDate;
   String? selectedItem;
   List<String> gendertype = ['Male', 'Female'];
+  final picker = ImagePicker();
+  File? imageFile;
+  String? profileUrl;
 
   @override
   void initState() {
@@ -38,12 +45,13 @@ class _EditProfileState extends State<EditProfile> {
         userData = data;
         String formatDate =
             DateFormat('y-MM-dd').format(data['birthDay'].toDate());
-        initDate = data['birthDay'].toDate();
+        selectedDate = data['birthDay'].toDate();
         _fullname.text = data['fullname'].toString();
         _address.text = data['address'].toString();
         selectedItem = data['gender'].toString();
         _bDay.text = formatDate;
         _pnNumber.text = data['phoneNumber'].toString();
+        profileUrl = data['profileUrl'].toString();
         isLoading = false;
       });
     });
@@ -52,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
   void datePicker() {
     showDatePicker(
             context: context,
-            initialDate: initDate!,
+            initialDate: selectedDate,
             firstDate: DateTime(1900),
             lastDate: DateTime(2100))
         .then((value) {
@@ -62,31 +70,6 @@ class _EditProfileState extends State<EditProfile> {
         _bDay.text = formatDate;
       });
     });
-  }
-
-  User? user = FirebaseAuth.instance.currentUser;
-
-  Future<void> updateUserBasic() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user!.uid)
-          .update({
-        'fullname': _fullname.text,
-        'gender': selectedItem,
-        'birthDay': selectedDate,
-        'phoneNumber': int.parse(_pnNumber.text),
-        'address': _address.text,
-      });
-      AppToastmsg.appToastMeassage('Update success');
-    } catch (e) {
-      if (e is FormatException) {
-        AppToastmsg.appToastMeassage(
-            '${e.message} (\'${e.source}\' is not a number)');
-      } else {
-        AppToastmsg.appToastMeassage('Error: $e');
-      }
-    }
   }
 
   @override
@@ -118,14 +101,42 @@ class _EditProfileState extends State<EditProfile> {
                                 child: Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       2, 2, 2, 2),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: const Icon(
-                                      Icons.account_circle,
-                                      color: AppColors.light,
-                                      size: 60,
-                                    ),
-                                  ),
+                                  child: profileUrl == null || profileUrl == ''
+                                      ? (imageFile != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50.0),
+                                              child: Image.file(
+                                                imageFile!,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                              child: const Icon(
+                                                Icons.account_circle,
+                                                color: AppColors.light,
+                                                size: 60,
+                                              ),
+                                            ))
+                                      : (imageFile != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50.0),
+                                              child: Image.file(
+                                                imageFile!,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(50.0),
+                                              child: Image.network(
+                                                profileUrl!,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            )),
                                 ),
                               ),
                               Positioned(
@@ -139,7 +150,18 @@ class _EditProfileState extends State<EditProfile> {
                                       borderRadius: BorderRadius.circular(40)),
                                   child: IconButton(
                                     color: AppColors.light,
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      Map<Permission, PermissionStatus>
+                                          statuses = await [
+                                        Permission.camera,
+                                      ].request();
+                                      if (statuses[Permission.camera]!
+                                          .isGranted) {
+                                        showImagePicker(context);
+                                      } else {
+                                        print('no permission provided');
+                                      }
+                                    },
                                     icon: const Icon(
                                       Icons.photo_camera_outlined,
                                       size: 20,
@@ -153,7 +175,8 @@ class _EditProfileState extends State<EditProfile> {
                         const SizedBox(height: 5),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(userData['fullname'].toString(),
+                          child: Text(
+                              capitalizedText(userData['fullname'].toString()),
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500)),
                         ),
@@ -183,7 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                                   borderRadius: appBorderRadius,
                                 ),
                                 child: DropdownButtonFormField<String>(
-                                  value: selectedItem !=null ? selectedItem : 'Male',
+                                  value: selectedItem ?? 'Male',
                                   items:
                                       gendertype.map<DropdownMenuItem<String>>(
                                     (String value) {
@@ -212,12 +235,6 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                             ),
-                            // Expanded(
-                            //   child: AppModernTextFormField(
-                            //     hintText: 'Gender',
-                            //     controller: _gender,
-                            //   ),
-                            // ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: AppModernTextFormField(
@@ -243,7 +260,14 @@ class _EditProfileState extends State<EditProfile> {
                         const SizedBox(height: 50),
                         AppPrimaryBtn(
                           onPressed: () {
-                            updateUserBasic();
+                            updateUserBasic(
+                              _fullname.text,
+                              selectedItem!,
+                              selectedDate,
+                              _pnNumber.text,
+                              _address.text,
+                              imageFile,
+                            );
                           },
                           btnText: 'Save',
                         )
@@ -254,5 +278,133 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
     );
+  }
+
+  void showImagePicker(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return Card(
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 5.2,
+                margin: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: InkWell(
+                      child: const Column(
+                        children: [
+                          Icon(
+                            Icons.image,
+                            size: 60.0,
+                          ),
+                          SizedBox(height: 12.0),
+                          Text(
+                            "Gallery",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.pop(context);
+                      },
+                    )),
+                    Expanded(
+                        child: InkWell(
+                      child: const SizedBox(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.camera_alt,
+                              size: 60.0,
+                            ),
+                            SizedBox(height: 12.0),
+                            Text(
+                              "Camera",
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                            )
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        _imgFromCamera();
+                        Navigator.pop(context);
+                      },
+                    ))
+                  ],
+                )),
+          );
+        });
+  }
+
+  _imgFromGallery() async {
+    await picker
+        .pickImage(source: ImageSource.gallery, imageQuality: 50)
+        .then((value) {
+      if (value != null) {
+        _cropImage(File(value.path));
+      }
+    });
+  }
+
+  _imgFromCamera() async {
+    await picker
+        .pickImage(source: ImageSource.camera, imageQuality: 50)
+        .then((value) {
+      if (value != null) {
+        _cropImage(File(value.path));
+      }
+    });
+  }
+
+  _cropImage(File imgFile) async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: imgFile.path,
+      aspectRatioPresets: Platform.isAndroid
+          ? [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9
+            ]
+          : [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio5x3,
+              CropAspectRatioPreset.ratio5x4,
+              CropAspectRatioPreset.ratio7x5,
+              CropAspectRatioPreset.ratio16x9
+            ],
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: "Image Cropper",
+          toolbarColor: AppColors.dark,
+          activeControlsWidgetColor: Theme.of(context).primaryColor,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(
+          title: "Image Cropper",
+        )
+      ],
+    );
+    if (croppedFile != null) {
+      imageCache.clear();
+      setState(() {
+        imageFile = File(croppedFile.path);
+      });
+      // reload();
+    }
   }
 }
