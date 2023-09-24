@@ -6,7 +6,7 @@ class AppModernTextFormField extends StatelessWidget {
   TextEditingController? controller = TextEditingController();
   String hintText;
   bool readOnly;
-  final onTap;
+  void Function()? onTap;
   TextInputType texttype;
 
   AppModernTextFormField(

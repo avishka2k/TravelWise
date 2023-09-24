@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -36,7 +35,7 @@ Future<void> updateUserBasic(
 ) async {
   try {
     if (imageFile != null) {
-      File image = File(imageFile!.path);
+      File image = File(imageFile.path);
 
       final storageRef = FirebaseStorage.instance
           .ref()

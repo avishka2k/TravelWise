@@ -8,7 +8,7 @@ class AppTextFormField extends StatelessWidget {
   String hintText;
   String? errormsg;
   bool readOnly;
-  final onTap;
+  void Function()? onTap;
 
 
   AppTextFormField({

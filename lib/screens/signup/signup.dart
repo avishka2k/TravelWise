@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travelwise/app_data.dart';
 import 'package:travelwise/components/app_button.dart';
-import 'package:travelwise/components/app_toast.dart';
 import 'package:travelwise/components/pw_form_field.dart';
 import 'package:travelwise/components/text_form_field.dart';
 import 'package:travelwise/firebase/auth/authentication.dart';
