@@ -6,6 +6,7 @@ import 'package:travelwise/components/capitalize.dart';
 import 'package:travelwise/components/settings_item.dart';
 import 'package:travelwise/firebase/auth/authentication.dart';
 import 'package:travelwise/firebase/user_basic.dart';
+import 'package:travelwise/screens/map/test.m.dart';
 import 'package:travelwise/screens/settings/edit_profile.dart';
 
 class AppSettings extends StatefulWidget {
@@ -179,6 +180,14 @@ class _AppSettingsState extends State<AppSettings> {
                         AppSettingsItem(
                           icon: Icons.notifications_none,
                           name: 'Notification',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          },
                         ),
                         const Row(
                           children: [
