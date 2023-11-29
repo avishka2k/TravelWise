@@ -6,8 +6,12 @@ import 'package:travelwise/components/capitalize.dart';
 import 'package:travelwise/components/settings_item.dart';
 import 'package:travelwise/firebase/auth/authentication.dart';
 import 'package:travelwise/firebase/user_basic.dart';
+import 'package:travelwise/screens/map/sample.dart';
 import 'package:travelwise/screens/map/test.m.dart';
 import 'package:travelwise/screens/settings/edit_profile.dart';
+
+import '../map/map_main.dart';
+import '../map/sds.dart';
 
 class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
@@ -32,7 +36,7 @@ class _AppSettingsState extends State<AppSettings> {
   getThemeType() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      selectedOption = prefs.getInt('themeType')!;
+      selectedOption = prefs.getInt('themeType') ?? 1;
     });
   }
 
@@ -184,7 +188,7 @@ class _AppSettingsState extends State<AppSettings> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomePage(),
+                                builder: (context) => SampleMap(),
                               ),
                             );
                           },

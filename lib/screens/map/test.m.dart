@@ -21,15 +21,24 @@ class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
 
   late StreamSubscription<Position> positionStream;
+  late Marker userMarker;
 
   @override
   void initState() {
     super.initState();
+   
     positionStream = Geolocator.getPositionStream().listen((Position position) {
       if (position != null) {
         updateFirebaseLocation(position.latitude, position.longitude);
       }
     });
+
+    userMarker = Marker(
+      markerId: MarkerId('user_location'),
+      position: LatLng(0, 0), // Initialize with default position
+      infoWindow: InfoWindow(title: 'User Location'),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+    );
   }
 
   void updateFirebaseLocation(double latitude, double longitude) {
@@ -89,6 +98,11 @@ class _HomePageState extends State<HomePage> {
       zoom: 16.0,
     );
     _controller.animateCamera(CameraUpdate.newCameraPosition(position));
+     setState(() {
+      userMarker = userMarker.copyWith(
+        positionParam: LatLng(latitude, longitude),
+      );
+    });
   }
 
   @override
@@ -104,7 +118,9 @@ class _HomePageState extends State<HomePage> {
             target: LatLng(0, 0),
             zoom: 16.0,
           ),
+          markers: {userMarker},
         ),
+        
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
