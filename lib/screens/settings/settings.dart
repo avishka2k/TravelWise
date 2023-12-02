@@ -6,6 +6,7 @@ import 'package:travelwise/components/capitalize.dart';
 import 'package:travelwise/components/settings_item.dart';
 import 'package:travelwise/firebase/auth/authentication.dart';
 import 'package:travelwise/firebase/user_basic.dart';
+import 'package:travelwise/screens/map/get_users_location.dart';
 import 'package:travelwise/screens/map/sample.dart';
 import 'package:travelwise/screens/map/test.m.dart';
 import 'package:travelwise/screens/settings/edit_profile.dart';
@@ -188,7 +189,7 @@ class _AppSettingsState extends State<AppSettings> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SampleMap(),
+                                builder: (context) => const SampleMap(),
                               ),
                             );
                           },
@@ -207,6 +208,14 @@ class _AppSettingsState extends State<AppSettings> {
                         AppSettingsItem(
                           icon: Icons.lock_outline,
                           name: 'Change Password',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const GetUserLocation(),
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(height: 5),
                       ],

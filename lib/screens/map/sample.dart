@@ -24,7 +24,6 @@ class _SampleMapState extends State<SampleMap> {
 
   void getCurrentLocation() async {
     Location location = Location();
-
     bool serviceEnabled;
     PermissionStatus permissionGranted;
 
@@ -50,6 +49,19 @@ class _SampleMapState extends State<SampleMap> {
           currentLocation = locationData;
         });
       },
+    );
+
+    location.onLocationChanged.listen((newLocation) {
+      currentLocation = newLocation;
+      _moveCameraToLocation(newLocation.latitude!, newLocation.longitude!);
+      setState(() {});
+    });
+  }
+
+  void _moveCameraToLocation(double latitude, double longitude) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newLatLng(LatLng(latitude, longitude)),
     );
   }
 
@@ -94,9 +106,6 @@ class _SampleMapState extends State<SampleMap> {
       body: currentLocation == null
           ? const Center(child: Text("Loading..."))
           : GoogleMap(
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
               initialCameraPosition: CameraPosition(
                 // target: sourceLocation,
                 target: LatLng(
@@ -119,7 +128,7 @@ class _SampleMapState extends State<SampleMap> {
                 Marker(
                   markerId: const MarkerId('current'),
                   icon: currentLocationIcon,
-                  infoWindow: InfoWindow(
+                  infoWindow: const InfoWindow(
                     title: 'Avishka Prabath',
                   ),
                   position: LatLng(
@@ -135,6 +144,9 @@ class _SampleMapState extends State<SampleMap> {
                   markerId: MarkerId('destination'),
                   position: destination,
                 )
+              },
+              onMapCreated: (controller) {
+                _controller.complete(controller);
               },
             ),
     );

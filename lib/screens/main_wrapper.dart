@@ -1,6 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/menu/menu.dart';
+// import 'package:flutter_app/menu/menu.dart';
 class MainWrapper extends StatefulWidget {
   const MainWrapper({super.key});
 
@@ -75,7 +75,7 @@ class _MainWrapperState extends State<MainWrapper> {
           alignment: Alignment.center,
           child: const Text('Page 2'),
         ),
-        MainMenu(),
+        // MainMenu(),
         Container(
           color: Colors.white,
           alignment: Alignment.center,
