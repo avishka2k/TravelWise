@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import '../../constants.dart';
 
 class SampleMap extends StatefulWidget {
@@ -21,6 +22,20 @@ class _SampleMapState extends State<SampleMap> {
   List<LatLng> polylineCoordinates = [];
   LocationData? currentLocation;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+
+  void uploadLocation(LocationData? currentLocation) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (currentLocation != null) {
+      DatabaseReference ref =
+          FirebaseDatabase.instance.ref("locations/${user!.uid}");
+
+      await ref.set({
+        "latitude": currentLocation.latitude,
+        "longitude": currentLocation.longitude,
+      });
+    }
+  }
 
   void getCurrentLocation() async {
     Location location = Location();
@@ -53,6 +68,7 @@ class _SampleMapState extends State<SampleMap> {
 
     location.onLocationChanged.listen((newLocation) {
       currentLocation = newLocation;
+      uploadLocation(newLocation);
       _moveCameraToLocation(newLocation.latitude!, newLocation.longitude!);
       setState(() {});
     });

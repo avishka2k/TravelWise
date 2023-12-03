@@ -1,18 +1,38 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:travelwise/app_data.dart';
+import 'package:travelwise/background/background_location.dart';
 import 'package:travelwise/firebase/auth/auth_changes.dart';
 import 'package:travelwise/firebase_options.dart';
-import 'package:travelwise/screens/map/map_main.dart';
-import 'package:travelwise/screens/map/test.m.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeFirebase();
+  await initializeService();
+  await requestPermissions();
+
+  runApp(const MyApp());
+}
+
+Future<void> initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+}
+
+Future<void> requestPermissions() async {
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.location,
+  ].request();
+
+  if (statuses[Permission.location] != PermissionStatus.granted) {
+    // Handle the case where the permission is not granted
+    print('Permission not granted!');
+  }
 }
 
 class MyApp extends StatelessWidget {
