@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -81,9 +83,7 @@ class _GetUserLocationState extends State<GetUserLocation> {
       appBar: AppBar(),
       body: currentLocation == null
           ? const Center(child: Text("Loading..."))
-          : Container(
-              child: Text('hiii'),
-            ),
+          : const Text('hiii'),
     );
   }
 }

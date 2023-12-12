@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +10,8 @@ import 'package:travelwise/app_data.dart';
 import 'package:travelwise/background/background_location.dart';
 import 'package:travelwise/firebase/auth/auth_changes.dart';
 import 'package:travelwise/firebase_options.dart';
+import 'package:travelwise/screens/group/create_new_group.dart';
+import 'package:travelwise/screens/main_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +53,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
         useMaterial3: true,
       ),
-      home: AuthChanges(),
+      home: const MainWrapper(),
     );
   }
 }

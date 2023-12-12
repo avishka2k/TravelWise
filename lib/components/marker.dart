@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextOnImage extends StatelessWidget {
-   TextOnImage({
+  const TextOnImage({
     super.key,
     required this.text,
   });
@@ -11,8 +11,8 @@ class TextOnImage extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Image(
-          image: const AssetImage(
+        const Image(
+          image: AssetImage(
             "images/onb1.jpg",
           ),
           height: 15,
@@ -20,7 +20,7 @@ class TextOnImage extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         )
       ],
     );

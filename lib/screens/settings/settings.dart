@@ -62,7 +62,7 @@ class _AppSettingsState extends State<AppSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWithBack(title: 'Settings'),
+      // appBar: const AppBarWithBack(title: 'Settings'),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

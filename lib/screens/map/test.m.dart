@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,9 +7,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:travelwise/firebase/fire_storage.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -26,17 +29,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-   
+
     positionStream = Geolocator.getPositionStream().listen((Position position) {
-      if (position != null) {
-        updateFirebaseLocation(position.latitude, position.longitude);
-      }
+      updateFirebaseLocation(position.latitude, position.longitude);
     });
 
     userMarker = Marker(
-      markerId: MarkerId('user_location'),
-      position: LatLng(0, 0), // Initialize with default position
-      infoWindow: InfoWindow(title: 'User Location'),
+      markerId: const MarkerId('user_location'),
+      position: const LatLng(0, 0), // Initialize with default position
+      infoWindow: const InfoWindow(title: 'User Location'),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
     );
   }
@@ -54,16 +55,16 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
- void listenForLocation(String userId) {
-  _locationRef.child(userId).onValue.listen((event) {
-    var snapshot = event.snapshot.value;
-    if (snapshot != null) {
-      double latitude = (snapshot as Map<String, dynamic>)['latitude'] ?? 0.0;
-      double longitude = (snapshot)['longitude'] ?? 0.0;
-      updateMap(latitude, longitude);
-    }
-  });
-}
+  void listenForLocation(String userId) {
+    _locationRef.child(userId).onValue.listen((event) {
+      var snapshot = event.snapshot.value;
+      if (snapshot != null) {
+        double latitude = (snapshot as Map<String, dynamic>)['latitude'] ?? 0.0;
+        double longitude = (snapshot)['longitude'] ?? 0.0;
+        updateMap(latitude, longitude);
+      }
+    });
+  }
 
 //   final FirebaseService _firebaseService = FirebaseService();
 // double? latitude;
@@ -85,7 +86,6 @@ class _HomePageState extends State<HomePage> {
 //     });
 //   }
 
-
   late GoogleMapController _controller;
 
   void onMapCreated(GoogleMapController controller) {
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
       zoom: 16.0,
     );
     _controller.animateCamera(CameraUpdate.newCameraPosition(position));
-     setState(() {
+    setState(() {
       userMarker = userMarker.copyWith(
         positionParam: LatLng(latitude, longitude),
       );
@@ -120,7 +120,6 @@ class _HomePageState extends State<HomePage> {
           ),
           markers: {userMarker},
         ),
-        
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
